@@ -1,0 +1,46 @@
+<!-- src/app/subject-create/subject-create.component.html -->
+<div class="container mt-4">
+  <h2>Crear Asignatura</h2>
+  <form (ngSubmit)="onSubmit()" #subjectForm="ngForm">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre de la Asignatura:</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        required
+        [(ngModel)]="subject.name"
+        name="name"
+        #name="ngModel"
+      />
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger">
+        El nombre es obligatorio.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Descripción:</label>
+      <textarea
+        id="description"
+        class="form-control"
+        [(ngModel)]="subject.description"
+        name="description"
+      ></textarea>
+    </div>
+    <button
+      type="button"
+      class="btn btn-primary me-2"
+      (click)="getSuggestions()"
+      [disabled]="!subject.name"
+    >
+      Obtener Sugerencias
+    </button>
+    <button type="submit" class="btn btn-success" [disabled]="subjectForm.invalid">
+      Crear Asignatura
+    </button>
+  </form>
+
+  <div *ngIf="suggestions" class="mt-4">
+    <h3>Sugerencias de la IA:</h3>
+    <pre>{{ suggestions }}</pre>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="container mt-4">
+  <h2>Mis Asignaturas</h2>
+  <div *ngIf="subjects && subjects.length; else noSubjects">
+    <div class="list-group">
+      <div
+        *ngFor="let subject of subjects"
+        class="list-group-item list-group-item-action"
+      >
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-1">{{ subject.name }}</h5>
+            <p class="mb-1">{{ subject.description }}</p>
+          </div>
+          <div>
+            <!-- Enlace para ver los recursos de la asignatura -->
+            <a [routerLink]="['/subjects', subject.id, 'resources']" class="btn btn-info btn-sm me-2">
+              Ver Recursos
+            </a>
+
+            <!-- Botón para editar la asignatura -->
+            <a [routerLink]="['/subjects/edit', subject.id]" class="btn btn-primary btn-sm me-2">
+              Editar
+            </a>
+
+            <!-- Botón para eliminar la asignatura -->
+            <button class="btn btn-danger btn-sm" (click)="deleteSubject(subject.id)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noSubjects>
+    <p>No tienes asignaturas creadas. <a [routerLink]="['/subjects/create']">Crea una aquí</a>.</p>
+  </ng-template>
+</div>

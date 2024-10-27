@@ -1,0 +1,75 @@
+<!-- src/app/subject-resources/subject-resources.component.html -->
+
+<div class="container mt-4">
+  <h2>Recursos de la Asignatura</h2>
+
+  <!-- Formulario para agregar un recurso -->
+  <form (ngSubmit)="addResource()" class="mb-4">
+    <div class="row">
+      <div class="col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="newResource.title"
+          name="title"
+          placeholder="Título del recurso"
+          required
+        />
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" [(ngModel)]="newResource.type" name="type" required>
+          <option value="Libro">Libro</option>
+          <option value="Enlace Web">Enlace Web</option>
+          <option value="Apunte">Apunte</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <!-- Campo para URL si el tipo es Enlace Web -->
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="newResource.url"
+          name="url"
+          placeholder="URL (opcional)"
+          *ngIf="newResource.type === 'Enlace Web'"
+        />
+        <!-- Campo para subir archivo si el tipo es Libro o Apunte -->
+        <input
+          type="file"
+          class="form-control"
+          (change)="onFileSelected($event)"
+          *ngIf="newResource.type === 'Libro' || newResource.type === 'Apunte'"
+        />
+      </div>
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Agregar</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Mostrar los recursos de la asignatura -->
+  <div *ngIf="resources.length > 0; else noResources">
+    <ul class="list-group">
+      <li *ngFor="let resource of resources" class="list-group-item">
+        <h5>{{ resource.title }}</h5>
+        <p><strong>Tipo:</strong> {{ resource.type }}</p>
+        <p *ngIf="resource.url">
+          <strong>URL:</strong> <a [href]="resource.url" target="_blank">{{ resource.url }}</a>
+        </p>
+        <p *ngIf="resource.notes"><strong>Notas:</strong> {{ resource.notes }}</p>
+
+        <!-- Información del archivo adjunto -->
+        <div *ngIf="resource.file_path">
+          <strong>Archivo adjunto:</strong>
+          <a [href]="resource.file_path" target="_blank">{{ getFileName(resource.file_path) }}</a>
+          <p><small>{{ getFileInfo(resource) }}</small></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Mensaje si no hay recursos -->
+  <ng-template #noResources>
+    <p>No hay recursos disponibles para esta asignatura.</p>
+  </ng-template>
+</div>
