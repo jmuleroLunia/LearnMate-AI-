@@ -17,6 +17,7 @@ class Resource(ResourceBase):
     id: int
     subject_id: int
     file_path: Optional[str] = None
+    status: str  # Nuevo campo 'status'
 
     class Config:
         orm_mode = True

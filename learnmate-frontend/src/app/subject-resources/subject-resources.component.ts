@@ -68,6 +68,21 @@ export class SubjectResourcesComponent implements OnInit {
     }
   }
 
+  // Eliminar un recurso
+  deleteResource(resourceId: number) {
+    if (confirm('¿Estás seguro de que deseas eliminar este recurso?')) {
+      this.subjectService.deleteResource(resourceId).subscribe(
+        (deletedResource) => {
+          // Actualizar la lista de recursos eliminando el recurso borrado
+          this.resources = this.resources.filter(resource => resource.id !== resourceId);
+        },
+        (error) => {
+          console.error('Error al eliminar el recurso:', error);
+        }
+      );
+    }
+  }
+
   // Obtener el nombre del archivo desde la ruta
   getFileName(filePath: string): string {
     return filePath.split('/').pop() || filePath;

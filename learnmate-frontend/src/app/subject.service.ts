@@ -44,7 +44,10 @@ export class SubjectService {
   getResources(subjectId: number): Observable<IResource[]> {
     return this.http.get<IResource[]>(`${this.apiUrl}${subjectId}/resources`);
   }
-
+// Método para eliminar un recurso
+  deleteResource(resourceId: number): Observable<IResource> {
+    return this.http.delete<IResource>(`http://localhost:8000/resources/${resourceId}`);
+  }
   // Método para agregar un recurso con archivo adjunto opcional
   addResource(subjectId: number, resourceData: CreateResourceDTO, file?: File | null): Observable<IResource> {
     const formData = new FormData();

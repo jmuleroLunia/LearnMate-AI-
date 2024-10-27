@@ -46,28 +46,36 @@
       </div>
     </div>
   </form>
-
-  <!-- Mostrar los recursos de la asignatura -->
+ <!-- Mostrar los recursos de la asignatura -->
   <div *ngIf="resources.length > 0; else noResources">
     <ul class="list-group">
       <li *ngFor="let resource of resources" class="list-group-item">
-        <h5>{{ resource.title }}</h5>
-        <p><strong>Tipo:</strong> {{ resource.type }}</p>
-        <p *ngIf="resource.url">
-          <strong>URL:</strong> <a [href]="resource.url" target="_blank">{{ resource.url }}</a>
-        </p>
-        <p *ngIf="resource.notes"><strong>Notas:</strong> {{ resource.notes }}</p>
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5>{{ resource.title }}</h5>
+            <p><strong>Tipo:</strong> {{ resource.type }}</p>
+            <p *ngIf="resource.url">
+              <strong>URL:</strong> <a [href]="resource.url" target="_blank">{{ resource.url }}</a>
+            </p>
+            <p *ngIf="resource.notes"><strong>Notas:</strong> {{ resource.notes }}</p>
 
-        <!-- Información del archivo adjunto -->
-        <div *ngIf="resource.file_path">
-          <strong>Archivo adjunto:</strong>
-          <a [href]="resource.file_path" target="_blank">{{ getFileName(resource.file_path) }}</a>
-          <p><small>{{ getFileInfo(resource) }}</small></p>
+            <!-- Información del archivo adjunto -->
+            <div *ngIf="resource.file_path">
+              <strong>Archivo adjunto:</strong>
+              <a [href]="resource.file_path" target="_blank">{{ getFileName(resource.file_path) }}</a>
+              <p><small>{{ getFileInfo(resource) }}</small></p>
+            </div>
+            <!-- Dentro del elemento de recurso -->
+          <p><strong>Estado:</strong> {{ resource.status }}</p>
+
+          </div>
+          <div>
+            <button class="btn btn-danger btn-sm" (click)="deleteResource(resource.id!)">Eliminar</button>
+          </div>
         </div>
       </li>
     </ul>
   </div>
-
   <!-- Mensaje si no hay recursos -->
   <ng-template #noResources>
     <p>No hay recursos disponibles para esta asignatura.</p>

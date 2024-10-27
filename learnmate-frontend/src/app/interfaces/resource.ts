@@ -1,15 +1,16 @@
 // src/app/interfaces/resource.interface.ts
 
+
 export interface IResource {
-  id?: number;
+  id: number;
   title: string;
   url?: string;
   type: string;  // "Libro", "Enlace Web", "Apunte"
   notes?: string;
   file_path?: string;
+  status: string;  // Nuevo campo 'status'
   subject_id?: number;
 }
-
 export interface CreateResourceDTO {
   title: string;
   url?: string;

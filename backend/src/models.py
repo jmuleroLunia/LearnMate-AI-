@@ -23,6 +23,7 @@ class Resource(Base):
     type = Column(String, nullable=False)  # "Libro", "Enlace Web", "Apunte"
     notes = Column(String, nullable=True)
     file_path = Column(String, nullable=True)
+    status = Column(String, nullable=False, default="pending")  # Nuevo campo 'status'
     subject_id = Column(Integer, ForeignKey('subjects.id'))
 
     subject = relationship("Subject", back_populates="resources")
