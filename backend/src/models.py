@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
 
 from src.database import Base
-
+from src.infrastructure.persistence.models.exam import ExamModel
 class Subject(Base):
     __tablename__ = 'subjects'
 
@@ -13,6 +13,7 @@ class Subject(Base):
     description = Column(String, nullable=True)
 
     resources = relationship("Resource", back_populates="subject", cascade="all, delete-orphan")
+    exams = relationship("ExamModel", back_populates="subject")
 
 class Resource(Base):
     __tablename__ = 'resources'

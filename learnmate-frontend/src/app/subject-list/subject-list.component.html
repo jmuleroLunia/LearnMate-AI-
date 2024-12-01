@@ -1,3 +1,5 @@
+<!-- src/app/subject-list/subject-list.component.html -->
+
 <div class="container mt-4">
   <h2>Mis Asignaturas</h2>
   <div *ngIf="subjects && subjects.length; else noSubjects">
@@ -11,20 +13,30 @@
             <h5 class="mb-1">{{ subject.name }}</h5>
             <p class="mb-1">{{ subject.description }}</p>
           </div>
-          <div>
+          <div class="btn-group">
             <!-- Enlace para ver los recursos de la asignatura -->
-            <a [routerLink]="['/subjects', subject.id, 'resources']" class="btn btn-info btn-sm me-2">
-              Ver Recursos
+            <a [routerLink]="['/subjects', subject.id, 'resources']" class="btn btn-info btn-sm">
+              <i class="bi bi-folder"></i> Recursos
+            </a>
+
+            <!-- Enlace para ver los exámenes de la asignatura -->
+            <a [routerLink]="['/subjects', subject.id, 'exams']" class="btn btn-success btn-sm">
+              <i class="bi bi-file-text"></i> Exámenes
+            </a>
+
+            <!-- Botón para generar examen ficticio -->
+            <a [routerLink]="['/subjects', subject.id, 'mock-exam']" class="btn btn-warning btn-sm">
+              <i class="bi bi-lightbulb"></i> Examen Ficticio
             </a>
 
             <!-- Botón para editar la asignatura -->
-            <a [routerLink]="['/subjects/edit', subject.id]" class="btn btn-primary btn-sm me-2">
-              Editar
+            <a [routerLink]="['/subjects/edit', subject.id]" class="btn btn-primary btn-sm">
+              <i class="bi bi-pencil"></i> Editar
             </a>
 
             <!-- Botón para eliminar la asignatura -->
             <button class="btn btn-danger btn-sm" (click)="deleteSubject(subject.id)">
-              Eliminar
+              <i class="bi bi-trash"></i> Eliminar
             </button>
           </div>
         </div>

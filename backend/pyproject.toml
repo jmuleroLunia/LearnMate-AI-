@@ -27,6 +27,9 @@ llama-parse = "^0.5.12"
 unstructured = "^0.16.3"
 markdown = "^3.7"
 unstructured-client = "^0.26.1"
+azure-ai-documentintelligence = "^1.0.0b4"
+pdfminer-six = "^20240706"
+pi-heif = "^0.20.0"
 
 [build-system]
 requires = ["poetry-core"]

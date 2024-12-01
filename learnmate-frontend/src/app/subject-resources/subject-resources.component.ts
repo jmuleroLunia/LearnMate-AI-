@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SubjectService } from '../subject.service';
 import {CreateResourceDTO, IResource} from "../interfaces/resource";
+import {debounceTime, distinctUntilChanged, Subject} from "rxjs";
 
 @Component({
   selector: 'app-subject-resources',
@@ -16,10 +17,24 @@ export class SubjectResourcesComponent implements OnInit {
   newResource: CreateResourceDTO = { title: '', type: 'Libro' };
   selectedFile: File | null = null;
 
+  // Variables para búsqueda
+  searchTerm: string = '';
+  searchResults: any[] = [];
+  isSearching: boolean = false;
+  private searchSubject = new Subject<string>();
+
   constructor(
     private subjectService: SubjectService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    // Configurar el debounce para la búsqueda
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.performSearch(term);
+    });
+  }
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -29,6 +44,39 @@ export class SubjectResourcesComponent implements OnInit {
     } else {
       console.error('No se pudo obtener el ID de la asignatura');
     }
+  }
+
+  // Método para manejar cambios en la búsqueda
+  onSearchChange(term: string): void {
+    this.searchSubject.next(term);
+  }
+
+  // Realizar la búsqueda
+  private performSearch(term: string): void {
+    if (!term.trim() || !this.subjectId) {
+      this.searchResults = [];
+      this.isSearching = false;
+      return;
+    }
+
+    this.isSearching = true;
+    this.subjectService.searchResources(this.subjectId, term).subscribe(
+      (results) => {
+        this.searchResults = results.results;
+        this.isSearching = false;
+      },
+      (error) => {
+        console.error('Error en la búsqueda:', error);
+        this.isSearching = false;
+      }
+    );
+  }
+
+  // Método para renderizar el contenido del resultado
+  renderContent(content: string): string {
+    // Aquí podrías implementar lógica para formatear el contenido
+    // Por ejemplo, resaltar términos de búsqueda
+    return content;
   }
 
   // Cargar recursos de la asignatura

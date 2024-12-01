@@ -2,6 +2,46 @@
 
 <div class="container mt-4">
   <h2>Recursos de la Asignatura</h2>
+<!-- Sección de búsqueda -->
+  <div class="mb-4">
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange($event)"
+        placeholder="Buscar en los recursos..."
+      />
+      <span class="input-group-text" *ngIf="isSearching">
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="visually-hidden">Buscando...</span>
+        </div>
+      </span>
+    </div>
+  </div>
+
+  <!-- Resultados de búsqueda -->
+  <div *ngIf="searchTerm && searchResults.length > 0" class="mb-4">
+    <div class="card">
+      <div class="card-header">
+        Resultados de búsqueda
+      </div>
+      <div class="card-body">
+        <div *ngFor="let result of searchResults" class="mb-3 p-3 border rounded">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="mb-2">{{ result.metadata.resource_title }}</h6>
+              <p class="mb-2" [innerHTML]="renderContent(result.content)"></p>
+              <small class="text-muted">
+                Relevancia: {{ (result.relevance_score * 100).toFixed(2) }}%
+              </small>
+            </div>
+            <span class="badge bg-secondary">{{ result.metadata.resource_type }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Formulario para agregar un recurso -->
   <form (ngSubmit)="addResource()" class="mb-4">

@@ -1,0 +1,84 @@
+<div class="container mt-4" [formGroup]="examForm">
+  <h2>Examen Ficticio</h2>
+
+  <div *ngIf="loading">
+    <p>Cargando examen...</p>
+  </div>
+
+  <div *ngIf="errorMessage">
+    <div class="alert alert-danger">{{ errorMessage }}</div>
+  </div>
+
+  <div *ngIf="exam && !loading">
+    <!-- Barra de progreso -->
+    <mat-progress-bar
+      mode="determinate"
+      [value]="progressPercentage"
+    ></mat-progress-bar>
+    <p>Progreso: {{ progressPercentage | number: '1.0-0' }}%</p>
+
+    <!-- Lista de preguntas -->
+    <div *ngFor="let question of exam.questions; let index = index" class="question-container">
+      <h5>Pregunta {{ index + 1 }} de {{ exam.questions.length }}</h5>
+
+      <p>{{ question.text }}</p>
+
+      <!-- Opciones de respuesta -->
+      <mat-radio-group
+        [formControlName]="'question' + index"
+        (change)="updateProgress()"
+        class="radio-group-vertical"
+      >
+        <mat-radio-button
+          *ngFor="let answer of question.answers; let i = index"
+          [value]="i"
+          class="radio-button-full-width"
+        >
+          {{ answer.text }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+       <button
+        mat-button
+        (click)="getCorrectAnswer(index)"
+        [disabled]="isAnswerLoading[index] || correctAnswers[index]"
+      >
+        {{ isAnswerLoading[index] ? 'Consultando...' :
+           correctAnswers[index] ? 'Respuesta mostrada' : 'Consultar Respuesta Correcta' }}
+        <mat-progress-spinner
+          *ngIf="isAnswerLoading[index]"
+          mode="indeterminate"
+          diameter="20">
+        </mat-progress-spinner>
+      </button>
+
+      <!-- Mostrar la respuesta correcta si está disponible -->
+      <div *ngIf="correctAnswers[index]" class="mt-2 answer-section">
+        <div class="answer-content">
+          <pre style="white-space: pre-wrap; font-family: inherit; margin: 0;">{{ correctAnswers[index] }}</pre>
+        </div>
+      </div>
+
+      <hr />
+    </div>
+
+    <!-- Botón para enviar el examen -->
+    <button mat-raised-button color="primary" (click)="submitExam()">
+      Enviar Examen
+    </button>
+
+    <!-- Botón para generar otro examen -->
+    <button class="btn btn-primary mt-4" (click)="generateMockExam()">
+      <i class="bi bi-arrow-clockwise"></i> Generar Otro Examen
+    </button>
+  </div>
+</div>
+
+<style>
+.answer-section {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+</style>

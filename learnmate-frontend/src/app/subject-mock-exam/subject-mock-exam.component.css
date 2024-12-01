@@ -1,0 +1,19 @@
+
+.radio-group-vertical {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.radio-button-full-width {
+  margin: 5px 0;
+}
+
+.question-container {
+  margin-bottom: 30px;
+}
+
+mat-radio-button {
+  display: block;
+  margin: 10px 0;
+}

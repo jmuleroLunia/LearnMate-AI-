@@ -1,0 +1,74 @@
+<!-- src/app/subject-exams/subject-exams.component.html -->
+<div class="container mt-4">
+  <h2>Exámenes de la Asignatura</h2>
+
+  <!-- Formulario para agregar exámenes -->
+  <form (ngSubmit)="addExam()" class="mb-4">
+    <div class="row">
+      <div class="col-md-4">
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="newExam.date"
+          name="date"
+          required
+        />
+      </div>
+      <div class="col-md-7">
+        <input
+          type="file"
+          class="form-control"
+          (change)="onFileSelected($event)"
+          accept=".pdf"
+          multiple
+        />
+      </div>
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Agregar</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Display errors if any -->
+  <div *ngIf="errors.length > 0" class="alert alert-warning">
+    <h5>Errores al procesar algunos archivos:</h5>
+    <ul>
+      <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+  </div>
+
+  <!-- Lista de exámenes -->
+  <div *ngIf="exams.length > 0; else noExams">
+    <div class="list-group">
+      <div *ngFor="let exam of exams" class="list-group-item">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h5 class="mb-1">Examen del {{ exam.date | date:'dd/MM/yyyy' }}</h5>
+            <div *ngIf="exam.questions.length > 0">
+              <p><strong>Preguntas:</strong></p>
+              <ul>
+                <li *ngFor="let question of exam.questions">
+                  {{ question.text }}
+                  <ul>
+                    <li *ngFor="let answer of question.answers">
+                      {{ answer.text }}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-danger btn-sm" (click)="deleteExam(exam.id!)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noExams>
+    <p>No hay exámenes disponibles para esta asignatura.</p>
+  </ng-template>
+</div>

@@ -1,5 +1,7 @@
 # app/schemas.py
+from datetime import datetime
 from typing import Optional, List
+from uuid import UUID
 
 from pydantic import BaseModel, HttpUrl
 
@@ -36,3 +38,54 @@ class SubjectOut(SubjectBase):
 
     class Config:
         orm_mode = True
+
+
+class AnswerBase(BaseModel):
+    text: str
+
+
+class AnswerCreate(AnswerBase):
+    pass
+
+
+class AnswerOut(AnswerBase):
+    id: UUID
+    question_id: UUID
+
+    class Config:
+        from_attributes = True
+
+
+class QuestionBase(BaseModel):
+    text: str
+
+
+class QuestionCreate(QuestionBase):
+    answers: List[AnswerCreate]
+
+
+class QuestionOut(QuestionBase):
+    id: UUID
+    exam_id: UUID
+    answers: List[AnswerOut]
+
+    class Config:
+        from_attributes = True
+
+
+class ExamBase(BaseModel):
+    date: Optional[datetime] = None
+
+
+class ExamCreate(ExamBase):
+    questions: Optional[List[QuestionCreate]] = None
+
+
+class ExamOut(ExamBase):
+    id: UUID
+    subject_id: int
+    questions: List[QuestionOut]
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
